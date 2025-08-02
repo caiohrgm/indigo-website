@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { motion } from 'framer-motion';
+// import { motion } from 'framer-motion';
 import { Navbar } from '../components/NavBar';
 import { Hero } from '../components/Hero';
 import { About } from '../components/About';
