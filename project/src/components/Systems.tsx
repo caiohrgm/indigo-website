@@ -256,14 +256,14 @@ export function Systems() {
         <button
           disabled={page === 0}
           onClick={() => setPage((p) => Math.max(p - 1, 0))}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          className="px-4 py-2 bg-indigo-100 rounded disabled:opacity-50 cursor-pointer"
         >
           Anterior
         </button>
         <button
           disabled={(page + 1) * pageSize >= sortedSystems.length}
           onClick={() => setPage((p) => p + 1)}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+          className="px-4 py-2 bg-indigo-blue rounded disabled:opacity-50 cursor-pointer text-white"
         >
           Próximo
         </button>
