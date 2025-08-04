@@ -7,7 +7,7 @@ export function Systems() {
     <section id="systems" className="py-16 px-6 max-w-6xl mx-auto">
       <h3 className="text-3xl font-semibold mb-6">Sistemas Controlados</h3>
       <p className="mb-4 text-lg">
-        A Indigo Technologies administra sistemas estratégicos sob a bandeira da Aliança.
+        A Indigo Technologies já atua em mais de 300 sistemas estratégicos.
       </p>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {systems.map((system, index) => {
