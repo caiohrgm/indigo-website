@@ -45,7 +45,7 @@ def criar_objeto(row):
 
     power = row["Power"]
     if pd.isna(power) or str(power).strip() == "":
-        power = "uncontrolled"
+        power = "unoccupied"
 
     population = row["Population"]
 
@@ -58,7 +58,7 @@ def criar_objeto(row):
 
 
     return {
-        "name": row["Star system"],
+        "name": row["Star system"][:-2],
         "government": government,
         "allegiance": allegiance,
         "population": population,
