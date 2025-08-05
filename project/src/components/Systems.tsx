@@ -28,26 +28,26 @@ export function Systems() {
   };
 
   const powerColors: Record<string, string> = {
-  // Aliança
-  "Edmund Mahon": "text-alliance-green font-semibold",
-  "Nakato Kaine": "text-[#9cff00] font-semibold", 
+    // Aliança
+    "Edmund Mahon": "text-alliance-green font-semibold",
+    "Nakato Kaine": "text-[#9cff00] font-semibold", 
 
-  // Federação
-  "Felicia Winters": "text-[#f69113] font-semibold",
-  "Jerome Archer": "text-[#db3239] font-semibold",
+    // Federação
+    "Felicia Winters": "text-[#f69113] font-semibold",
+    "Jerome Archer": "text-[#db3239] font-semibold",
 
-  // Império
-  "Arissa Lavigny-Duval": "text-[#780cdf] font-semibold",
-  "Aisling Duval": "text-[#08a2f6] font-semibold",
-  "Denton Patreus": "text-[#09d2d5] font-semibold",
-  "Zemina Torval": "text-[#0253ac] font-semibold",
-
-  // Independentes
-  "Li Yong-Rui": "text-[#c7fd25] font-semibold",
-  "Pranav Antal": "text-[#e3f747] font-semibold",
-  "Archon Delaine": "text-[#92ff04] font-semibold",
-  "Yuri Grom": "text-[#f94d03] font-semibold"
-};
+    // Império
+    "Arissa Lavigny-Duval": "text-[#780cdf] font-semibold",
+    "Aisling Duval": "text-[#08a2f6] font-semibold",
+    "Denton Patreus": "text-[#09d2d5] font-semibold",
+    "Zemina Torval": "text-[#0253ac] font-semibold",
+ 
+    // Independentes
+    "Li Yong-Rui": "text-[#c7fd25] font-semibold text-center",
+    "Pranav Antal": "text-[#e3f747] font-semibold",
+    "Archon Delaine": "text-[#92ff04] font-semibold",
+    "Yuri Grom": "text-[#f94d03] font-semibold"
+  };
 
   // --- FILTRO ---
   let filteredSystems = [...systems];
@@ -112,7 +112,7 @@ export function Systems() {
       </div>
 
       <div className="overflow-x-auto border rounded-lg">
-        <table className="min-w-full border-collapse" style={{ backgroundColor: "#D8DAD3" }}>
+        <table className="min-w-full border-collapse">
           <thead className="bg-[#6666FF] text-white">
             <tr>
               <th className="px-4 py-2 text-left">Sistema</th>
@@ -136,7 +136,7 @@ export function Systems() {
                   ? "Não Controlado"
                   : system.power;
               
-              const powerClass = powerColors[powerDisplay] ?? "text-gray-700 font-medium";
+              const powerClass = powerColors[powerDisplay] ?? "text-white font-semibold";
 
               return (
                 <tr key={index} className="border-b hover:bg-gray-50">
@@ -152,7 +152,11 @@ export function Systems() {
                     {allegianceTranslations[system.allegiance] ??
                       system.allegiance}
                   </td>
-                  <td className={`px-4 py-2 ${powerClass}`}>{powerDisplay}</td>
+                  <td className="px-4 py-2">
+                    <span className={`${powerClass} inline-block px-1 bg-black rounded`}>
+                      {powerDisplay}
+                    </span>
+                  </td>
                   <td className="px-4 py-2">
                     {system.population.toLocaleString()}
                   </td>
@@ -164,7 +168,7 @@ export function Systems() {
                           className="text-yellow-500"
                           title="Controlado pela Indigo"
                         />
-                        <span className="text-indigo-600 font-semibold">
+                        <span className="text-indigo-blue font-semibold">
                           Indigo
                         </span>
                       </>
@@ -174,7 +178,7 @@ export function Systems() {
                           className="text-red-500"
                           title="Sistema concorrente"
                         />
-                        <span className="text-gray-600">Concorrente</span>
+                        <span className="text-dark-grey font-semibold">Concorrente</span>
                       </>
                     )}
                   </td>
