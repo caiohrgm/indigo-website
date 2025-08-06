@@ -99,9 +99,9 @@ export function Systems() {
           value={sortOption}
           onChange={(e) => {
             setSortOption(e.target.value);
-            setPage(0); // volta para primeira página ao mudar
+            setPage(0);
           }}
-          className="border px-2 py-1 rounded"
+          className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           <option value="nome">Nome (A-Z)</option>
           <option value="pop-desc">População (ordem decrescente)</option>
@@ -196,14 +196,14 @@ export function Systems() {
         <button
           disabled={page === 0}
           onClick={() => setPage((p) => Math.max(p - 1, 0))}
-          className="px-4 py-2 bg-indigo-100 rounded disabled:opacity-50 cursor-pointer"
+          className="px-4 py-2 bg-indigo-100 rounded disabled:opacity-50 hover:bg-green-300 cursor-pointer"
         >
           Anterior
         </button>
         <button
           disabled={(page + 1) * pageSize >= sortedSystems.length}
           onClick={() => setPage((p) => p + 1)}
-          className="px-4 py-2 bg-indigo-blue rounded disabled:opacity-50 cursor-pointer text-white"
+          className="px-4 py-2 bg-indigo-blue rounded disabled:opacity-50 cursor-pointer text-white hover:bg-green-500"
         >
           Próximo
         </button>

@@ -2,7 +2,7 @@ import indigo_space_fleet from '../assets/indigo_space_fleet_logo.png'
 
 export function Footer() {
   return (
-    <footer id="contact" className="bg-[#4A4A48] text-white py-8 px-6 text-center">
+    <footer id="footer" className="bg-[#4A4A48] text-white py-8 px-6 text-center">
       {/* Imagem com link */}
       <h2 className='font-exo-2 text-lg'>Junte-se a nossa frota!</h2>
       <a href="https://inara.cz/elite/squadron/3982/" target="_blank" rel="noopener noreferrer">
@@ -14,8 +14,8 @@ export function Footer() {
       </a>
 
       <p><sup>©</sup> 3334 Indigo Technologies</p>
-      <p className="text-sm text-[#D8DAD3] mt-2">Website fictício inspirado em</p>
-      <p className="text-sm text-[#D8DAD3] mt-2"> <sup>©</sup>Elite: Dangerous da Frontier Developments </p>
+      <p className="text-sm text-[#D8DAD3] mt-2">Website fictício</p>
+      <p className="text-sm text-[#D8DAD3] mt-2"> <sup>©</sup>Elite: Dangerous - Frontier Developments </p>
     </footer>
   );
 }

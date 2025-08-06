@@ -7,6 +7,7 @@ import { Domains } from '../components/Domains';
 import { Systems } from '../components/Systems';
 import { Alliance } from '../components/Alliance';
 import { Footer } from '../components/Footer';
+import { Contact } from '../components/Contact';
 
 export default function Home() {
   useEffect(() => {
@@ -21,6 +22,7 @@ export default function Home() {
       <Domains />
       <Systems />
       <Alliance />
+      <Contact/>
       <Footer />
     </main>
   );

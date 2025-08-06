@@ -43,12 +43,12 @@ export function Navbar() {
           </li>
           <li>
             <a href="#alliance" className="hover:text-indigo-blue font-exo-2 font-semibold">
-              Aliança
+              Poder Galático
             </a>
           </li>
           <li>
             <a href="#contact" className="hover:text-indigo-blue font-exo-2 font-semibold">
-              Contato
+              Afilie-se
             </a>
           </li>
         </ul>
@@ -74,7 +74,7 @@ export function Navbar() {
           </li>
           <li>
             <a href="#alliance" className="hover:text-indigo-blue font-exo-2 font-semibold">
-              Aliança
+              Poder Galático
             </a>
           </li>
           <li>
