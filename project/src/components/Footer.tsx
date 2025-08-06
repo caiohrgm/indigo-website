@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer id="footer" className="bg-[#4A4A48] text-white py-8 px-6 text-center">
       {/* Imagem com link */}
-      <h2 className='font-exo-2 text-lg'>Junte-se a nossa frota!</h2>
+      <h2 className='font-exo-2 text-lg'>Junte-se a nossa frota também pelo Inara!</h2>
       <a href="https://inara.cz/elite/squadron/3982/" target="_blank" rel="noopener noreferrer">
         <img
           src={indigo_space_fleet}
