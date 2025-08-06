@@ -2,7 +2,7 @@ export function About() {
   return (
     <section id="about" className="py-16 px-6 max-w-5xl mx-auto">
       <h3 className="text-3xl font-semibold text-[#4A4A48] mb-6 font-exo-2 ">Sobre a Indigo Technologies</h3>
-      <p className="text-lg leading-relaxed text-justify">
+      <div className="text-lg leading-relaxed text-justify hyphenate">
         <p className="indent-8 mb-4">
             Indigo Technologies é uma companhia independente fundada nas fronteiras do espaço habitado, no sistema Bletii, com especialização em operações de comércio, 
             transporte interestelar e pesquisas xenobiológicas. Desde seus primeiros passos, a corporação se destacou por sua atuação estratégica e inovadora, sempre guiada pelo compromisso com a expansão consciente da humanidade.
@@ -32,7 +32,7 @@ export function About() {
             para construir um futuro sustentável e promissor para todas as formas de vida no universo.
           </p>
         </div>
-      </p>
+      </div>
     </section>
   );
 }
