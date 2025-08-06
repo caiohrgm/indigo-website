@@ -82,11 +82,11 @@ export function Systems() {
   return (
     <section id="systems" className="py-16 px-6 max-w-6xl mx-auto">
       <h3 className="text-3xl font-semibold mb-6 font-exo-2">
-        Sistemas Controlados
+        Onde está a Indigo?
       </h3>
       <p className="mb-4 text-lg">
         A Indigo Technologies possui uma presença marcante na galáxia, atuando
-        em mais de 300 sistemas.
+        em mais de 350 sistemas.
       </p>
 
       {/* SELECT PARA FILTRAR/ORDENAR */}
