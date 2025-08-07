@@ -1,10 +1,97 @@
 import { useState } from "react";
 import systems from "../data/systems.json";
 import { FaCrown, FaTimesCircle } from "react-icons/fa";
+import { FaInfoCircle } from "react-icons/fa";
+import { useEffect } from "react";
+
+
+// Componente auxiliar para tooltip com suporte a mobile
+function TooltipIcon() {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const toggleTooltip = () => setShowTooltip((prev) => !prev);
+
+  return (
+    <div
+      className="relative group md:hover:opacity-100"
+      onClick={toggleTooltip}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        className="w-5 h-5 text-indigo-blue cursor-pointer"
+      >
+        <path d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3l9-8z" />
+      </svg>
+      <div
+        className={`absolute left-full top-1/2 transform -translate-y-1/2 ml-2 w-44 p-2 text-sm text-white bg-dark-grey text-center rounded shadow z-10 transition-opacity ${
+          showTooltip ? "opacity-100" : "opacity-0 md:group-hover:opacity-100"
+        }`}
+      >
+        Sistema natal da Indigo
+      </div>
+    </div>
+  );
+}
+
+function TooltipInfo() {
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  const toggleTooltip = () => setShowTooltip((prev) => !prev);
+
+  return (
+    <div className="relative group" onClick={toggleTooltip}>
+      <FaInfoCircle
+        className="text-alliance-green cursor-pointer text-lg"
+        title="Informações"
+      />
+      <div
+        className={`absolute left-full top-1/2 transform -translate-y-1/2 ml-2 w-56 p-2 text-sm text-white bg-dark-grey text-center rounded shadow z-10 transition-opacity ${
+          showTooltip ? "opacity-100" : "opacity-0 md:group-hover:opacity-100"
+        }`}
+      >
+        Esse botão busca os dados mais recentes dos sistemas via API.
+      </div>
+    </div>
+  );
+}
+
+type AlertBoxProps = {
+  title: string;
+  message: string;
+  onClose: () => void;
+};
+
+export function AlertBox({ title, message, onClose }: AlertBoxProps) {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000); // fecha automaticamente após 3 segundos
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20 z-50">
+      <div className="bg-white text-black p-6 rounded-lg shadow-lg w-full max-w-sm">
+        <h2 className="text-xl font-semibold mb-2">{title}</h2>
+        <p className="mb-4">{message}</p>
+        <button
+          className="bg-alliance-green text-white px-4 py-2 rounded hover:bg-gray-700"
+          onClick={onClose}
+        >
+          Fechar
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export function Systems() {
+  const [systemsData, setSystemsData] = useState(systems);
   const [page, setPage] = useState(0);
   const [sortOption, setSortOption] = useState("nome");
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
   const pageSize = 10;
 
   const governmentTranslations: Record<string, string> = {
@@ -16,7 +103,7 @@ export function Systems() {
     Democracy: "Democracia",
     Dictatorship: "Ditadura",
     Feudal: "Feudal",
-    Patronage: "Patrocínio",
+    Patronage: "Patronato",
     "Prison Colony": "Colônia Penal",
     Theocracy: "Teocracia",
   };
@@ -50,12 +137,15 @@ export function Systems() {
   };
 
   // --- FILTRO ---
-  let filteredSystems = [...systems];
+  let filteredSystems = [...systemsData];
   if (sortOption === "lider-yes") {
-    filteredSystems = systems.filter((s) => s.is_leader === "yes");
+    filteredSystems = systemsData.filter((s) => s.is_leader === "yes");
   }
   if (sortOption === "lider-no") {
-    filteredSystems = systems.filter((s) => s.is_leader !== "yes");
+    filteredSystems = systemsData.filter((s) => s.is_leader !== "yes");
+  }
+  if (sortOption === "alianca") {
+    filteredSystems = systemsData.filter((s) => s.power === "Edmund Mahon");
   }
 
   // --- ORDENANDO ---
@@ -68,7 +158,7 @@ export function Systems() {
         return b.population - a.population;
       case "pop-asc":
         return a.population - b.population;
-      default: // nome
+      default: 
         return a.name.localeCompare(b.name);
     }
   });
@@ -78,6 +168,26 @@ export function Systems() {
     page * pageSize,
     (page + 1) * pageSize
   );
+
+  function updateSystemsData() {
+    fetch("https://indigo-website-scrap-cron-job.onrender.com/update-system-data", {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((newSystems) => {
+        setSystemsData(newSystems);  // Atualiza o estado com os dados recebidos
+        setAlertTitle("Sucesso!");
+        setAlertMessage("Dados atualizados com sucesso.");
+        setAlertVisible(true);
+        setPage(0);
+      })
+      .catch((err) => {
+        console.error("Erro ao atualizar dados:", err);
+        setAlertTitle("Erro");
+        setAlertMessage("Não foi possível atualizar os dados.");
+        setAlertVisible(true);
+      });
+  }
 
   return (
     <section id="systems" className="py-16 px-6 max-w-6xl mx-auto">
@@ -108,6 +218,7 @@ export function Systems() {
           <option value="pop-asc">População (ordem crescente)</option>
           <option value="lider-yes">Somente líder Indigo</option>
           <option value="lider-no">Somente concorrentes</option>
+          <option value="alianca">Sistemas da Aliança (Edmund Mahon)</option>
         </select>
       </div>
 
@@ -188,56 +299,53 @@ export function Systems() {
           </tbody>
         </table>
       </div>
+      
+      <div className="flex items-center justify-between gap-4 mt-4">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={updateSystemsData}
+            className="px-4 py-2 bg-indigo-blue text-white rounded hover:bg-green-500 cursor-pointer"
+          >
+            Atualizar dados dos sistemas
+          </button>
 
-      <div className="flex items-center justify-end gap-4 mt-4">
-        <span className="text-gray-600">
-          Página {page + 1} / {totalPages}
-        </span>
-        <button
-          disabled={page === 0}
-          onClick={() => setPage((p) => Math.max(p - 1, 0))}
-          className="px-4 py-2 bg-indigo-100 rounded disabled:opacity-50 hover:bg-green-300 cursor-pointer"
-        >
-          Anterior
-        </button>
-        <button
-          disabled={(page + 1) * pageSize >= sortedSystems.length}
-          onClick={() => setPage((p) => p + 1)}
-          className="px-4 py-2 bg-indigo-blue rounded disabled:opacity-50 cursor-pointer text-white hover:bg-green-500"
-        >
-          Próximo
-        </button>
+          {/* Subir o ícone levemente */}
+          <div className="-translate-y-1.5">
+            <TooltipInfo />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <span className="text-gray-600">
+            Página {page + 1} / {totalPages}
+          </span>
+          <button
+            disabled={page === 0}
+            onClick={() => setPage((p) => Math.max(p - 1, 0))}
+            className="px-4 py-2 bg-indigo-100 rounded disabled:opacity-50 hover:bg-green-300 cursor-pointer"
+          >
+            Anterior
+          </button>
+          <button
+            disabled={(page + 1) * pageSize >= sortedSystems.length}
+            onClick={() => setPage((p) => p + 1)}
+            className="px-4 py-2 bg-indigo-blue rounded disabled:opacity-50 cursor-pointer text-white hover:bg-green-500"
+          >
+            Próximo
+          </button>
+        </div>
       </div>
+      {alertVisible && (
+        <AlertBox
+          title={alertTitle}
+          message={alertMessage}
+          onClose={() => {
+            setAlertVisible(false);
+          }}
+        />
+      )}
+
     </section>
   );
 }
 
-// Componente auxiliar para tooltip com suporte a mobile
-function TooltipIcon() {
-  const [showTooltip, setShowTooltip] = useState(false);
-
-  const toggleTooltip = () => setShowTooltip((prev) => !prev);
-
-  return (
-    <div
-      className="relative group md:hover:opacity-100"
-      onClick={toggleTooltip}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-        className="w-5 h-5 text-[#6666FF] cursor-pointer"
-      >
-        <path d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3l9-8z" />
-      </svg>
-      <div
-        className={`absolute left-full top-1/2 transform -translate-y-1/2 ml-2 w-44 p-2 text-sm text-white bg-dark-grey text-center rounded shadow z-10 transition-opacity ${
-          showTooltip ? "opacity-100" : "opacity-0 md:group-hover:opacity-100"
-        }`}
-      >
-        Sistema natal da Indigo
-      </div>
-    </div>
-  );
-}
