@@ -147,6 +147,11 @@ export function Systems() {
   if (sortOption === "alianca") {
     filteredSystems = systemsData.filter((s) => s.power === "Edmund Mahon");
   }
+  if (sortOption === "outros-poderes") {
+    filteredSystems = systemsData.filter(
+      (s) => s.power !== "Edmund Mahon" && s.power?.toLowerCase() !== "unoccupied"
+    )
+  }
 
   // --- ORDENANDO ---
   const sortedSystems = filteredSystems.sort((a, b) => {
@@ -219,20 +224,27 @@ export function Systems() {
           <option value="lider-yes">Somente líder Indigo</option>
           <option value="lider-no">Somente concorrentes</option>
           <option value="alianca">Sistemas da Aliança (Edmund Mahon)</option>
+          <option value="outros-poderes">Outros Poderes Galáticos</option>
         </select>
+
+        <div className="ml-auto mr-4 text-gray-700">
+          Resultado da busca:{" "}
+          <span className="font-semibold">{filteredSystems.length}</span>{" "}
+          sistemas encontrados
+        </div>
       </div>
 
       <div className="overflow-x-auto border rounded-lg">
         <table className="min-w-full border-collapse">
           <thead className="bg-[#6666FF] text-white">
             <tr>
-              <th className="px-4 py-2 text-left">Sistema</th>
-              <th className="px-4 py-2 text-left">Tipo de Governo</th>
-              <th className="px-4 py-2 text-left">Afiliação</th>
-              <th className="px-4 py-2 text-left">Poder Galático</th>
-              <th className="px-4 py-2 text-left">População</th>
-              <th className="px-4 py-2 text-left">Influência</th>
-              <th className="px-4 py-2 text-left">Líder do Sistema</th>
+              <th className="px-4 py-2 text-center">Sistema</th>
+              <th className="px-4 py-2 text-center">Tipo de Governo</th>
+              <th className="px-4 py-2 text-center">Afiliação</th>
+              <th className="px-4 py-2 text-center">Poder Galático</th>
+              <th className="px-4 py-2 text-center">População</th>
+              <th className="px-4 py-2 text-center">Influência Indigo</th>
+              <th className="px-4 py-2 text-center">Líder do Sistema</th>
             </tr>
           </thead>
           <tbody>
@@ -246,58 +258,71 @@ export function Systems() {
                 system.power?.toLowerCase() === "unoccupied"
                   ? "Não Controlado"
                   : system.power;
-              
-              const powerClass = powerColors[powerDisplay] ?? "text-white font-semibold";
+
+              const powerClass =
+                powerColors[powerDisplay] ?? "text-white font-semibold";
 
               return (
                 <tr key={index} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2 flex items-center gap-2">
-                    {system.name}
-                    {system.name === "Bletii" && <TooltipIcon />}
+                  <td className="px-4 py-2 text-center">
+                    <div className="flex items-center justify-center gap-2">
+                      {system.name}
+                      {system.name === "Bletii" && <TooltipIcon />}
+                    </div>
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 text-center">
                     {governmentTranslations[system.government] ??
                       system.government}
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 text-center">
                     {allegianceTranslations[system.allegiance] ??
                       system.allegiance}
                   </td>
-                  <td className="px-4 py-2">
-                    <span className={`${powerClass} inline-block px-1 bg-black rounded`}>
+                  <td className="px-4 py-2 text-center">
+                    <span
+                      className={`${powerClass} inline-block px-1 bg-black rounded`}
+                    >
                       {powerDisplay}
                     </span>
                   </td>
-                  <td className="px-4 py-2">
+                  <td className="px-4 py-2 text-center">
                     {system.population.toLocaleString()}
                   </td>
-                  <td className="px-4 py-2">{influence}%</td>
-                  <td className="px-4 py-2 flex items-center gap-2">
-                    {system.is_leader === "yes" ? (
-                      <>
-                        <FaCrown
-                          className="text-yellow-500"
-                          title="Controlado pela Indigo"
-                        />
-                        <span className="text-indigo-blue font-semibold">
-                          Indigo
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <FaTimesCircle
-                          className="text-red-500"
-                          title="Sistema concorrente"
-                        />
-                        <span className="text-dark-grey font-semibold">Concorrente</span>
-                      </>
-                    )}
+
+                  <td className="px-4 py-2 text-center">{influence}%</td>
+
+                  {/* Aqui alinhamos só as células da coluna à esquerda */}
+                  <td className="px-4 py-2 text-left">
+                    <div className="flex items-center gap-2">
+                      {system.is_leader === "yes" ? (
+                        <>
+                          <FaCrown
+                            className="text-yellow-500"
+                            title="Controlado pela Indigo"
+                          />
+                          <span className="text-indigo-blue font-semibold">
+                            Indigo
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <FaTimesCircle
+                            className="text-red-500"
+                            title="Sistema concorrente"
+                          />
+                          <span className="text-dark-grey font-semibold">
+                            Concorrente
+                          </span>
+                        </>
+                      )}
+                    </div>
                   </td>
                 </tr>
               );
             })}
           </tbody>
         </table>
+
       </div>
       
       <div className="flex items-center justify-between gap-4 mt-4">
