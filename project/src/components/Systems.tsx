@@ -3,7 +3,18 @@ import systems from "../data/systems.json";
 import { FaCrown, FaTimesCircle } from "react-icons/fa";
 import { FaInfoCircle } from "react-icons/fa";
 import { useEffect } from "react";
+import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/react';
+import { FaCheck } from 'react-icons/fa';
 
+const filterOptions = [
+  { value: 'nome', label: 'Nome (A-Z)' },
+  { value: 'pop-desc', label: 'População (ordem decrescente)' },
+  { value: 'pop-asc', label: 'População (ordem crescente)' },
+  { value: 'lider-yes', label: 'Somente líder Indigo' },
+  { value: 'lider-no', label: 'Somente concorrentes' },
+  { value: 'alianca', label: 'Sistemas da Aliança (Edmund Mahon)' },
+  { value: 'outros-poderes', label: 'Outros Poderes Galáticos' },
+];
 
 // Componente auxiliar para tooltip com suporte a mobile
 function TooltipIcon() {
@@ -205,32 +216,57 @@ export function Systems() {
       </p>
 
       {/* SELECT PARA FILTRAR/ORDENAR */}
-      <div className="mb-4 flex gap-4 items-center">
+      <div className="mb-4 flex flex-col sm:flex-row gap-2 sm:gap-4 items-start sm:items-center">
         <label htmlFor="sort" className="font-medium">
           Ordenar / Filtrar:
         </label>
-        <select
-          id="sort"
+
+        
+        <Listbox
           value={sortOption}
-          onChange={(e) => {
-            setSortOption(e.target.value);
+          onChange={(value) => {
+            setSortOption(value);
             setPage(0);
           }}
-          className="px-4 py-2 rounded-lg border border-gray-300 bg-white shadow-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          <option value="nome">Nome (A-Z)</option>
-          <option value="pop-desc">População (ordem decrescente)</option>
-          <option value="pop-asc">População (ordem crescente)</option>
-          <option value="lider-yes">Somente líder Indigo</option>
-          <option value="lider-no">Somente concorrentes</option>
-          <option value="alianca">Sistemas da Aliança (Edmund Mahon)</option>
-          <option value="outros-poderes">Outros Poderes Galáticos</option>
-        </select>
+          {({ open }) => (
+            <div className="relative w-75 ">
+              {/* Botão do Listbox */}
+              <Listbox.Button
+                className={`w-79 h-8 px-4 py-[-10px] text-left rounded-lg shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+                  open ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-300'
+                }`}
+              >
+                {filterOptions.find((opt) => opt.value === sortOption)?.label}
+              </Listbox.Button>
 
-        <div className="ml-auto mr-4 text-gray-700">
-          Resultado da busca:{" "}
-          <span className="font-semibold">{filteredSystems.length}</span>{" "}
-          sistemas encontrados
+              {/* Dropdown */}
+              <Listbox.Options className="absolute mt-1 w-79 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto z-10">
+                {filterOptions.map((option) => (
+                  <Listbox.Option
+                    key={option.value}
+                    value={option.value}
+                    className={({ active, selected }) =>
+                      `cursor-pointer px-4 py-2 flex justify-between items-center ${
+                        active ? 'bg-alliance-green text-white' : 'text-gray-700'
+                      } ${selected ? 'font-semibold' : ''}`
+                    }
+                  >
+                    {({ selected }) => (
+                      <>
+                        {option.label}
+                        {selected && <FaCheck className="text-white ml-2" />}
+                      </>
+                    )}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </div>
+          )}
+        </Listbox>
+
+        <div className="text-gray-700 text-sm mt-2 sm:mt-0 sm:ml-auto">
+          Resultado da busca: <span className="font-semibold">{filteredSystems.length}</span> sistemas encontrados
         </div>
       </div>
 
@@ -238,13 +274,13 @@ export function Systems() {
         <table className="min-w-full border-collapse">
           <thead className="bg-[#6666FF] text-white">
             <tr>
-              <th className="px-4 py-2 text-center">Sistema</th>
-              <th className="px-4 py-2 text-center">Tipo de Governo</th>
-              <th className="px-4 py-2 text-center">Afiliação</th>
-              <th className="px-4 py-2 text-center">Poder Galático</th>
-              <th className="px-4 py-2 text-center">População</th>
-              <th className="px-4 py-2 text-center">Influência Indigo</th>
-              <th className="px-4 py-2 text-center">Líder do Sistema</th>
+              <th className="px-4 py-2 text-center w-40 text-sm">Sistema</th>
+              <th className="px-4 py-2 text-center w-32 text-sm">Tipo de Governo</th>
+              <th className="px-4 py-2 text-center w-32 text-sm">Afiliação</th>
+              <th className="px-4 py-2 text-center w-40 text-sm">Poder Galático</th>
+              <th className="px-4 py-2 text-center w-32 text-sm">População</th>
+              <th className="px-4 py-2 text-center w-32 text-sm">Influência Indigo</th>
+              <th className="px-4 py-2 text-left w-40 text-sm">Líder do Sistema</th>
             </tr>
           </thead>
           <tbody>
@@ -264,21 +300,21 @@ export function Systems() {
 
               return (
                 <tr key={index} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-2 text-center whitespace-nowrap overflow-hidden text-ellipsis">
                     <div className="flex items-center justify-center gap-2">
                       {system.name}
                       {system.name === "Bletii" && <TooltipIcon />}
                     </div>
                   </td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-2 text-center w-42">
                     {governmentTranslations[system.government] ??
                       system.government}
                   </td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-2 text-center w-auto">
                     {allegianceTranslations[system.allegiance] ??
                       system.allegiance}
                   </td>
-                  <td className="px-4 py-2 text-center">
+                  <td className="px-4 py-2 text-center whitespace-nowrap overflow-hidden text-ellipsis">
                     <span
                       className={`${powerClass} inline-block px-1 bg-black rounded`}
                     >
@@ -289,7 +325,7 @@ export function Systems() {
                     {system.population.toLocaleString()}
                   </td>
 
-                  <td className="px-4 py-2 text-center">{influence}%</td>
+                  <td className="px-4 py-2 text-center w-45">{influence}%</td>
 
                   {/* Aqui alinhamos só as células da coluna à esquerda */}
                   <td className="px-4 py-2 text-left">
