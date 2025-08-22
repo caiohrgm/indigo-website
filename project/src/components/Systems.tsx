@@ -36,11 +36,11 @@ function TooltipIcon() {
         <path d="M12 3l9 8h-3v9h-4v-6h-4v6H6v-9H3l9-8z" />
       </svg>
       <div
-        className={`absolute left-full top-1/2 transform -translate-y-1/2 ml-2 w-44 p-2 text-sm text-white bg-dark-grey text-center rounded shadow z-10 transition-opacity ${
+        className={`absolute left-full top-1/2 transform -translate-y-1/2 ml-2 w-auto p-2 text-sm text-white bg-dark-grey text-center rounded shadow z-10 transition-opacity ${
           showTooltip ? "opacity-100" : "opacity-0 md:group-hover:opacity-100"
         }`}
       >
-        Sistema natal da Indigo
+        Sistema natal
       </div>
     </div>
   );
@@ -230,25 +230,25 @@ export function Systems() {
           }}
         >
           {({ open }) => (
-            <div className="relative w-75 ">
+            <div className="relative w-75">
               {/* Botão do Listbox */}
-              <Listbox.Button
+              <ListboxButton
                 className={`w-79 h-8 px-4 py-[-10px] text-left rounded-lg shadow-sm border focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
                   open ? 'border-indigo-500 ring-2 ring-indigo-500' : 'border-gray-300'
                 }`}
               >
                 {filterOptions.find((opt) => opt.value === sortOption)?.label}
-              </Listbox.Button>
+              </ListboxButton>
 
               {/* Dropdown */}
-              <Listbox.Options className="absolute mt-1 w-79 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto z-10">
+              <ListboxOptions className="absolute mt-1 w-79 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-auto z-10">
                 {filterOptions.map((option) => (
-                  <Listbox.Option
+                  <ListboxOption
                     key={option.value}
                     value={option.value}
                     className={({ active, selected }) =>
                       `cursor-pointer px-4 py-2 flex justify-between items-center ${
-                        active ? 'bg-alliance-green text-white' : 'text-gray-700'
+                        active ? 'bg-green-500 text-white' : 'text-gray-700'
                       } ${selected ? 'font-semibold' : ''}`
                     }
                   >
@@ -258,12 +258,13 @@ export function Systems() {
                         {selected && <FaCheck className="text-white ml-2" />}
                       </>
                     )}
-                  </Listbox.Option>
+                  </ListboxOption>
                 ))}
-              </Listbox.Options>
+              </ListboxOptions>
             </div>
           )}
         </Listbox>
+
 
         <div className="text-gray-700 text-sm mt-2 sm:mt-0 sm:ml-auto">
           Resultado da busca: <span className="font-semibold">{filteredSystems.length}</span> sistemas encontrados
@@ -300,7 +301,7 @@ export function Systems() {
 
               return (
                 <tr key={index} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-2 text-center whitespace-nowrap overflow-hidden text-ellipsis">
+                  <td className="px-4 py-2 text-center whitespace-nowrap text-ellipsis">
                     <div className="flex items-center justify-center gap-2">
                       {system.name}
                       {system.name === "Bletii" && <TooltipIcon />}
